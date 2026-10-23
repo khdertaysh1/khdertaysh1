@@ -1,0 +1,56 @@
+{
+  "tool": "SessionScope",
+  "version": "0.1.0",
+  "routes": [
+    {
+      "route": "GET https://lab.example.test/api/profile?token",
+      "before": [
+        {
+          "status": 200,
+          "authorization_header_present": true,
+          "cookie_names": [
+            "sid"
+          ],
+          "cookie_header_present": true,
+          "set_cookie_attributes": [
+            {
+              "name": "sid",
+              "secure": true,
+              "http_only": true,
+              "same_site": "lax",
+              "empty_value": false,
+              "max_age_zero": false
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "status": 401,
+          "authorization_header_present": true,
+          "cookie_names": [
+            "sid"
+          ],
+          "cookie_header_present": true,
+          "set_cookie_attributes": [
+            {
+              "name": "sid",
+              "secure": true,
+              "http_only": true,
+              "same_site": "lax",
+              "empty_value": false,
+              "max_age_zero": false
+            }
+          ]
+        }
+      ],
+      "assessment": "access_denied_observed"
+    }
+  ],
+  "limits": [
+    "Captures do not prove request timing, logout completion or server-side revocation.",
+    "A 2xx response alone does not establish authenticated access.",
+    "Markers can occur in cached/public/error responses. Verify freshness and identity manually.",
+    "Cookie values, header values and response bodies are omitted. Paths and names are retained."
+  ]
+}

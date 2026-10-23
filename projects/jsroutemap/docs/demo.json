@@ -1,0 +1,53 @@
+{
+  "tool": "JSRouteMap",
+  "version": "0.1.0",
+  "files_scanned": 1,
+  "candidates": [
+    {
+      "source": "examples/app.js",
+      "line": 2,
+      "route": "/api/profile?token",
+      "method": "UNKNOWN",
+      "context": "fetch",
+      "dynamic": false
+    },
+    {
+      "source": "examples/app.js",
+      "line": 3,
+      "route": "/api/preferences",
+      "method": "POST",
+      "context": "axios.post",
+      "dynamic": false
+    },
+    {
+      "source": "examples/app.js",
+      "line": 5,
+      "route": "/api/status",
+      "method": "GET",
+      "context": "xhr.open",
+      "dynamic": false
+    },
+    {
+      "source": "examples/app.js",
+      "line": 6,
+      "route": "/api/accounts/{dynamic}/settings",
+      "method": "UNKNOWN",
+      "context": "fetch",
+      "dynamic": true
+    },
+    {
+      "source": "examples/app.js",
+      "line": 7,
+      "route": "https://lab.example.test:8443/v2/items?key",
+      "method": "UNKNOWN",
+      "context": "string_literal",
+      "dynamic": false
+    }
+  ],
+  "limits": [
+    "Lexical heuristic: comments, embedded strings and regular expressions can cause false positives.",
+    "Concatenated paths, escaped quotes and dynamic expressions may be missed.",
+    "A candidate does not prove route existence, accessibility or a vulnerability.",
+    "Query values and URL credentials are removed. Source paths and route path segments are retained."
+  ]
+}

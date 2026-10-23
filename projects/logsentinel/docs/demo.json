@@ -1,0 +1,38 @@
+{
+  "tool": "LogSentinel",
+  "version": "0.1.0",
+  "parsed_lines": 6,
+  "skipped_lines": 0,
+  "alerts": [
+    {
+      "rule": "ssh_failure_burst",
+      "source_ip": "192.0.2.10",
+      "timestamp": "2026-10-23T10:00:04+00:00",
+      "window_seconds": 300,
+      "count": 5,
+      "severity": "review",
+      "evidence_line": 5
+    },
+    {
+      "rule": "ssh_success_after_failures",
+      "source_ip": "192.0.2.10",
+      "timestamp": "2026-10-23T10:00:06+00:00",
+      "window_seconds": 300,
+      "count": 5,
+      "severity": "review",
+      "evidence_line": 6
+    }
+  ],
+  "configuration": {
+    "window_seconds": 300,
+    "failure_threshold": 5,
+    "path_threshold": 10
+  },
+  "limits": [
+    "Alerts are triage signals, not confirmed attacks; NAT, automation and stale credentials can trigger them.",
+    "Nginx requires the standard combined/common request prefix; custom JSON logs are not supported.",
+    "SSH supports password failures and password/publickey successes; other events are skipped.",
+    "Source IPs and line references are retained; usernames, raw lines and URL query values are omitted.",
+    "Inputs must be chronological; RFC3164 requires an explicit year and assumes UTC."
+  ]
+}

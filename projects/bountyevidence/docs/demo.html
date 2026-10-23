@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'">
+<title>BountyEvidence report</title><style>
+:root{color-scheme:dark}body{font:16px/1.6 system-ui;background:#0c1422;color:#dbe8f8;max-width:1100px;margin:40px auto;padding:0 24px}
+h1{color:#65dbc6}pre{background:#142238;padding:24px;border:1px solid #304762;border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+small{color:#afc1d6}</style><h1>BountyEvidence</h1><small>Local evidence • observations require analyst review</small><pre>{
+  &quot;tool&quot;: &quot;BountyEvidence&quot;,
+  &quot;version&quot;: &quot;0.1.0&quot;,
+  &quot;finding&quot;: {
+    &quot;title&quot;: &quot;Protected response remains accessible after logout (synthetic demo)&quot;,
+    &quot;asset&quot;: &quot;https://lab.example.test&quot;,
+    &quot;summary&quot;: &quot;A fresh request returned the demo protected marker after logout.&quot;,
+    &quot;expected&quot;: &quot;The old session is denied access to protected account data.&quot;,
+    &quot;actual&quot;: &quot;The synthetic recorded response contains the protected marker.&quot;,
+    &quot;impact&quot;: &quot;Potential continued account access. Confirm freshness, account identity and server-side behavior.&quot;,
+    &quot;preconditions&quot;: [
+      &quot;Use two accounts owned by the tester.&quot;,
+      &quot;Confirm that the selected endpoint requires authentication.&quot;
+    ],
+    &quot;steps&quot;: [
+      &quot;Sign in as the test user.&quot;,
+      &quot;Record a baseline response from GET /api/profile.&quot;,
+      &quot;Complete logout and confirm its response.&quot;,
+      &quot;Send one fresh request with the prior session in the authorized lab.&quot;
+    ],
+    &quot;limitations&quot;: [
+      &quot;This example is fabricated and does not identify a real vulnerability.&quot;
+    ],
+    &quot;remediation&quot;: [
+      &quot;Invalidate the server-side session during logout.&quot;,
+      &quot;Add a regression test for previously issued sessions.&quot;
+    ],
+    &quot;evidence&quot;: [
+      {
+        &quot;label&quot;: &quot;After-logout capture&quot;,
+        &quot;reference&quot;: &quot;after.har, entry 1&quot;,
+        &quot;observation&quot;: &quot;HTTP 200 and the synthetic protected marker.&quot;
+      }
+    ]
+  },
+  &quot;privacy&quot;: &quot;Best-effort redaction; unknown secrets, identifiers and URL paths may remain.&quot;
+}
+</pre></html>

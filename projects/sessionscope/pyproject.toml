@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sessionscope"
+version = "0.1.0"
+description = "Compare recorded HTTP sessions without replaying requests."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Khedr Tayshoori"}]
+keywords = ["security", "blue-team", "termux", "offline"]
+classifiers = ["Programming Language :: Python :: 3", "Operating System :: OS Independent"]
+
+[project.scripts]
+sessionscope = "sessionscope.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["sessionscope*"]

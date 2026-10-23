@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'">
+<title>SessionScope report</title><style>
+:root{color-scheme:dark}body{font:16px/1.6 system-ui;background:#0c1422;color:#dbe8f8;max-width:1100px;margin:40px auto;padding:0 24px}
+h1{color:#65dbc6}pre{background:#142238;padding:24px;border:1px solid #304762;border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+small{color:#afc1d6}</style><h1>SessionScope</h1><small>Local evidence • observations require analyst review</small><pre>{
+  &quot;tool&quot;: &quot;SessionScope&quot;,
+  &quot;version&quot;: &quot;0.1.0&quot;,
+  &quot;routes&quot;: [
+    {
+      &quot;route&quot;: &quot;GET https://lab.example.test/api/profile?token&quot;,
+      &quot;before&quot;: [
+        {
+          &quot;status&quot;: 200,
+          &quot;authorization_header_present&quot;: true,
+          &quot;cookie_names&quot;: [
+            &quot;sid&quot;
+          ],
+          &quot;cookie_header_present&quot;: true,
+          &quot;set_cookie_attributes&quot;: [
+            {
+              &quot;name&quot;: &quot;sid&quot;,
+              &quot;secure&quot;: true,
+              &quot;http_only&quot;: true,
+              &quot;same_site&quot;: &quot;lax&quot;,
+              &quot;empty_value&quot;: false,
+              &quot;max_age_zero&quot;: false
+            }
+          ]
+        }
+      ],
+      &quot;after&quot;: [
+        {
+          &quot;status&quot;: 401,
+          &quot;authorization_header_present&quot;: true,
+          &quot;cookie_names&quot;: [
+            &quot;sid&quot;
+          ],
+          &quot;cookie_header_present&quot;: true,
+          &quot;set_cookie_attributes&quot;: [
+            {
+              &quot;name&quot;: &quot;sid&quot;,
+              &quot;secure&quot;: true,
+              &quot;http_only&quot;: true,
+              &quot;same_site&quot;: &quot;lax&quot;,
+              &quot;empty_value&quot;: false,
+              &quot;max_age_zero&quot;: false
+            }
+          ]
+        }
+      ],
+      &quot;assessment&quot;: &quot;access_denied_observed&quot;
+    }
+  ],
+  &quot;limits&quot;: [
+    &quot;Captures do not prove request timing, logout completion or server-side revocation.&quot;,
+    &quot;A 2xx response alone does not establish authenticated access.&quot;,
+    &quot;Markers can occur in cached/public/error responses. Verify freshness and identity manually.&quot;,
+    &quot;Cookie values, header values and response bodies are omitted. Paths and names are retained.&quot;
+  ]
+}
+</pre></html>

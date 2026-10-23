@@ -1,0 +1,51 @@
+{
+  "tool": "FlowDiff",
+  "version": "0.1.0",
+  "pairing": "method_url_then_occurrence",
+  "comparisons": [
+    {
+      "route": "GET https://lab.example.test/api/profile?token",
+      "occurrence": 0,
+      "difference": {
+        "status": {
+          "left": 200,
+          "right": 401
+        },
+        "request": {
+          "headers_added": [],
+          "headers_removed": [],
+          "json_structure": {
+            "left_state": "not_captured_or_empty",
+            "right_state": "not_captured_or_empty",
+            "added": [],
+            "removed": [],
+            "type_changed": []
+          }
+        },
+        "response": {
+          "headers_added": [],
+          "headers_removed": [],
+          "json_structure": {
+            "left_state": "parsed_json",
+            "right_state": "parsed_json",
+            "added": [
+              "/error"
+            ],
+            "removed": [
+              "/account",
+              "/account/display",
+              "/account/id"
+            ],
+            "type_changed": []
+          }
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Scalar value changes are intentionally omitted, including booleans and numbers.",
+    "Different routes require --pair-by-index and analyst-verified ordering.",
+    "Arrays compare by index; absent HAR content is not evidence of an empty server response.",
+    "Paths and JSON property names remain visible; query values and body values are omitted."
+  ]
+}

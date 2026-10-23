@@ -1,0 +1,37 @@
+{
+  "tool": "BountyEvidence",
+  "version": "0.1.0",
+  "finding": {
+    "title": "Protected response remains accessible after logout (synthetic demo)",
+    "asset": "https://lab.example.test",
+    "summary": "A fresh request returned the demo protected marker after logout.",
+    "expected": "The old session is denied access to protected account data.",
+    "actual": "The synthetic recorded response contains the protected marker.",
+    "impact": "Potential continued account access. Confirm freshness, account identity and server-side behavior.",
+    "preconditions": [
+      "Use two accounts owned by the tester.",
+      "Confirm that the selected endpoint requires authentication."
+    ],
+    "steps": [
+      "Sign in as the test user.",
+      "Record a baseline response from GET /api/profile.",
+      "Complete logout and confirm its response.",
+      "Send one fresh request with the prior session in the authorized lab."
+    ],
+    "limitations": [
+      "This example is fabricated and does not identify a real vulnerability."
+    ],
+    "remediation": [
+      "Invalidate the server-side session during logout.",
+      "Add a regression test for previously issued sessions."
+    ],
+    "evidence": [
+      {
+        "label": "After-logout capture",
+        "reference": "after.har, entry 1",
+        "observation": "HTTP 200 and the synthetic protected marker."
+      }
+    ]
+  },
+  "privacy": "Best-effort redaction; unknown secrets, identifiers and URL paths may remain."
+}

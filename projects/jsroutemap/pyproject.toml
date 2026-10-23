@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jsroutemap"
+version = "0.1.0"
+description = "Inventory static API route candidates in local JavaScript."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Khedr Tayshoori"}]
+keywords = ["security", "blue-team", "termux", "offline"]
+classifiers = ["Programming Language :: Python :: 3", "Operating System :: OS Independent"]
+
+[project.scripts]
+jsroutemap = "jsroutemap.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["jsroutemap*"]

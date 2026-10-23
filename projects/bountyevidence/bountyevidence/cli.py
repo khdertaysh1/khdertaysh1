@@ -1,0 +1,122 @@
+"""Validate a finding and render Markdown, JSON or HTML from local evidence."""
+import argparse
+import html
+import re
+from pathlib import Path
+from ._support import atomic_write, load_json, object_at, output
+
+TEMPLATE = {
+    'title': 'Protected response remains accessible after logout (synthetic demo)',
+    'asset': 'https://lab.example.test', 'summary': 'A fresh request returned the demo protected marker after logout.',
+    'preconditions': ['Use two accounts owned by the tester.', 'Confirm that the selected endpoint requires authentication.'],
+    'steps': ['Sign in as the test user.', 'Record a baseline response from GET /api/profile.',
+              'Complete logout and confirm its response.', 'Send one fresh request with the prior session in the authorized lab.'],
+    'expected': 'The old session is denied access to protected account data.',
+    'actual': 'The synthetic recorded response contains the protected marker.',
+    'impact': 'Potential continued account access. Confirm freshness, account identity and server-side behavior.',
+    'evidence': [{'label': 'After-logout capture', 'reference': 'after.har, entry 1', 'observation': 'HTTP 200 and the synthetic protected marker.'}],
+    'limitations': ['This example is fabricated and does not identify a real vulnerability.'],
+    'remediation': ['Invalidate the server-side session during logout.', 'Add a regression test for previously issued sessions.']}
+REQUIRED = ('title', 'asset', 'summary', 'preconditions', 'steps', 'expected', 'actual', 'impact', 'evidence', 'limitations', 'remediation')
+TEXT = ('title', 'asset', 'summary', 'expected', 'actual', 'impact')
+LISTS = ('preconditions', 'steps', 'limitations', 'remediation')
+# Best-effort sanitization; arbitrary secret values cannot be recognized reliably.
+LABELED_SECRET = re.compile(r'''(?ix)\b(authorization|cookie|set-cookie|password|passwd|access[_-]?token|refresh[_-]?token|api[_-]?key|client[_-]?secret)\b\s*[:=]\s*[^\r\n]+''')
+BEARER = re.compile(r'(?i)\bBearer\s+[A-Za-z0-9._~+/=-]+')
+JWT = re.compile(r'\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b')
+URL_QUERY = re.compile(r'(https?://[^\s?#]+)\?[^\s#]*')
+
+
+def redact(text):
+    text = LABELED_SECRET.sub(lambda match: match.group(1) + ': [REDACTED]', text)
+    text = BEARER.sub('Bearer [REDACTED]', text)
+    text = JWT.sub('[REDACTED_JWT]', text)
+    return URL_QUERY.sub(r'\1?[QUERY_REDACTED]', text)
+
+
+def validate(data):
+    object_at(data, 'finding')
+    missing = [field for field in REQUIRED if field not in data]
+    if missing:
+        raise ValueError('missing fields: ' + ', '.join(missing))
+    unknown = set(data) - set(REQUIRED)
+    if unknown:
+        raise ValueError('unknown fields: ' + ', '.join(sorted(unknown)))
+    clean = {}
+    for field in TEXT:
+        if not isinstance(data[field], str) or not data[field].strip():
+            raise ValueError(f'{field} must be non-empty text')
+        clean[field] = redact(data[field])
+    for field in LISTS:
+        items = data[field]
+        if not isinstance(items, list) or not items or any(not isinstance(s, str) or not s.strip() for s in items):
+            raise ValueError(f'{field} must be a non-empty list of non-empty strings')
+        clean[field] = [redact(item) for item in items]
+    if not isinstance(data['evidence'], list) or not data['evidence']:
+        raise ValueError('evidence must be a non-empty array')
+    clean['evidence'] = []
+    for item in data['evidence']:
+        object_at(item, 'evidence item')
+        if set(item) != {'label', 'reference', 'observation'}:
+            raise ValueError('evidence items need only label, reference and observation')
+        if any(not isinstance(v, str) or not v.strip() for v in item.values()):
+            raise ValueError('evidence fields must contain non-empty text')
+        clean['evidence'].append({key: redact(value) for key, value in item.items()})
+    return clean
+
+
+def quoted(value):
+    # Prevent embedded HTML, Markdown links/images, headings or fences from becoming active content.
+    value = html.escape(value, quote=False)
+    value = re.sub(r'([\\`*_{}\[\]()#!|])', r'\\\1', value)
+    return '\n'.join('> ' + line for line in value.splitlines())
+
+
+def markdown(finding):
+    lines = ['# Vulnerability report', '', '## Title', '', quoted(finding['title']), '']
+    for field in REQUIRED[1:]:
+        lines += ['## ' + field.replace('_', ' ').title(), '']
+        value = finding[field]
+        if field == 'evidence':
+            for index, item in enumerate(value, 1):
+                lines += [f'### Evidence {index}', '', quoted(item['label']), '', quoted(item['reference']), '', quoted(item['observation']), '']
+        elif isinstance(value, list):
+            for index, item in enumerate(value, 1):
+                lines += [f'**{index}.**', '', quoted(item), '']
+        else:
+            lines += [quoted(value), '']
+    lines += ['---', 'Generated by BountyEvidence 0.1.0. Redaction is best effort; review before sharing.', '']
+    return '\n'.join(lines)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest='command', required=True)
+    init = sub.add_parser('init', help='Create a synthetic finding template; refuses existing files')
+    init.add_argument('destination')
+    build = sub.add_parser('build', help='Validate and build a report')
+    build.add_argument('finding')
+    build.add_argument('-o', '--output', required=True, help='.md, .json or .html output')
+    args = parser.parse_args(argv)
+    try:
+        if args.command == 'init':
+            import json
+            # Exclusive creation avoids overwriting an existing report.
+            with Path(args.destination).open('x', encoding='utf-8') as stream:
+                json.dump(TEMPLATE, stream, ensure_ascii=False, indent=2)
+                stream.write('\n')
+            return 0
+        target = Path(args.output)
+        if target.resolve() == Path(args.finding).resolve():
+            raise ValueError('output must not overwrite finding input')
+        if target.suffix.lower() not in ('.md', '.json', '.html'):
+            raise ValueError('output extension must be .md, .json or .html')
+        finding = validate(load_json(args.finding))
+        if target.suffix.lower() == '.md':
+            atomic_write(target, markdown(finding))
+        else:
+            output({'tool': 'BountyEvidence', 'version': '0.1.0', 'finding': finding,
+                    'privacy': 'Best-effort redaction; unknown secrets, identifiers and URL paths may remain.'}, target, (args.finding,))
+        return 0
+    except (OSError, ValueError, TypeError, RecursionError) as exc:
+        parser.exit(2, f'error: {exc}\n')

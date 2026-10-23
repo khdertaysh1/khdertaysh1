@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'">
+<title>JSRouteMap report</title><style>
+:root{color-scheme:dark}body{font:16px/1.6 system-ui;background:#0c1422;color:#dbe8f8;max-width:1100px;margin:40px auto;padding:0 24px}
+h1{color:#65dbc6}pre{background:#142238;padding:24px;border:1px solid #304762;border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+small{color:#afc1d6}</style><h1>JSRouteMap</h1><small>Local evidence • observations require analyst review</small><pre>{
+  &quot;tool&quot;: &quot;JSRouteMap&quot;,
+  &quot;version&quot;: &quot;0.1.0&quot;,
+  &quot;files_scanned&quot;: 1,
+  &quot;candidates&quot;: [
+    {
+      &quot;source&quot;: &quot;examples/app.js&quot;,
+      &quot;line&quot;: 2,
+      &quot;route&quot;: &quot;/api/profile?token&quot;,
+      &quot;method&quot;: &quot;UNKNOWN&quot;,
+      &quot;context&quot;: &quot;fetch&quot;,
+      &quot;dynamic&quot;: false
+    },
+    {
+      &quot;source&quot;: &quot;examples/app.js&quot;,
+      &quot;line&quot;: 3,
+      &quot;route&quot;: &quot;/api/preferences&quot;,
+      &quot;method&quot;: &quot;POST&quot;,
+      &quot;context&quot;: &quot;axios.post&quot;,
+      &quot;dynamic&quot;: false
+    },
+    {
+      &quot;source&quot;: &quot;examples/app.js&quot;,
+      &quot;line&quot;: 5,
+      &quot;route&quot;: &quot;/api/status&quot;,
+      &quot;method&quot;: &quot;GET&quot;,
+      &quot;context&quot;: &quot;xhr.open&quot;,
+      &quot;dynamic&quot;: false
+    },
+    {
+      &quot;source&quot;: &quot;examples/app.js&quot;,
+      &quot;line&quot;: 6,
+      &quot;route&quot;: &quot;/api/accounts/{dynamic}/settings&quot;,
+      &quot;method&quot;: &quot;UNKNOWN&quot;,
+      &quot;context&quot;: &quot;fetch&quot;,
+      &quot;dynamic&quot;: true
+    },
+    {
+      &quot;source&quot;: &quot;examples/app.js&quot;,
+      &quot;line&quot;: 7,
+      &quot;route&quot;: &quot;https://lab.example.test:8443/v2/items?key&quot;,
+      &quot;method&quot;: &quot;UNKNOWN&quot;,
+      &quot;context&quot;: &quot;string_literal&quot;,
+      &quot;dynamic&quot;: false
+    }
+  ],
+  &quot;limits&quot;: [
+    &quot;Lexical heuristic: comments, embedded strings and regular expressions can cause false positives.&quot;,
+    &quot;Concatenated paths, escaped quotes and dynamic expressions may be missed.&quot;,
+    &quot;A candidate does not prove route existence, accessibility or a vulnerability.&quot;,
+    &quot;Query values and URL credentials are removed. Source paths and route path segments are retained.&quot;
+  ]
+}
+</pre></html>

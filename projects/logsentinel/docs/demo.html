@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'">
+<title>LogSentinel report</title><style>
+:root{color-scheme:dark}body{font:16px/1.6 system-ui;background:#0c1422;color:#dbe8f8;max-width:1100px;margin:40px auto;padding:0 24px}
+h1{color:#65dbc6}pre{background:#142238;padding:24px;border:1px solid #304762;border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+small{color:#afc1d6}</style><h1>LogSentinel</h1><small>Local evidence • observations require analyst review</small><pre>{
+  &quot;tool&quot;: &quot;LogSentinel&quot;,
+  &quot;version&quot;: &quot;0.1.0&quot;,
+  &quot;parsed_lines&quot;: 6,
+  &quot;skipped_lines&quot;: 0,
+  &quot;alerts&quot;: [
+    {
+      &quot;rule&quot;: &quot;ssh_failure_burst&quot;,
+      &quot;source_ip&quot;: &quot;192.0.2.10&quot;,
+      &quot;timestamp&quot;: &quot;2026-10-23T10:00:04+00:00&quot;,
+      &quot;window_seconds&quot;: 300,
+      &quot;count&quot;: 5,
+      &quot;severity&quot;: &quot;review&quot;,
+      &quot;evidence_line&quot;: 5
+    },
+    {
+      &quot;rule&quot;: &quot;ssh_success_after_failures&quot;,
+      &quot;source_ip&quot;: &quot;192.0.2.10&quot;,
+      &quot;timestamp&quot;: &quot;2026-10-23T10:00:06+00:00&quot;,
+      &quot;window_seconds&quot;: 300,
+      &quot;count&quot;: 5,
+      &quot;severity&quot;: &quot;review&quot;,
+      &quot;evidence_line&quot;: 6
+    }
+  ],
+  &quot;configuration&quot;: {
+    &quot;window_seconds&quot;: 300,
+    &quot;failure_threshold&quot;: 5,
+    &quot;path_threshold&quot;: 10
+  },
+  &quot;limits&quot;: [
+    &quot;Alerts are triage signals, not confirmed attacks; NAT, automation and stale credentials can trigger them.&quot;,
+    &quot;Nginx requires the standard combined/common request prefix; custom JSON logs are not supported.&quot;,
+    &quot;SSH supports password failures and password/publickey successes; other events are skipped.&quot;,
+    &quot;Source IPs and line references are retained; usernames, raw lines and URL query values are omitted.&quot;,
+    &quot;Inputs must be chronological; RFC3164 requires an explicit year and assumes UTC.&quot;
+  ]
+}
+</pre></html>

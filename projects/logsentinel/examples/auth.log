@@ -1,0 +1,6 @@
+2026-10-23T10:00:00+00:00 lab sshd[42]: Failed password for invalid user demo from 192.0.2.10 port 4242 ssh2
+2026-10-23T10:00:01+00:00 lab sshd[42]: Failed password for invalid user demo from 192.0.2.10 port 4242 ssh2
+2026-10-23T10:00:02+00:00 lab sshd[42]: Failed password for invalid user demo from 192.0.2.10 port 4242 ssh2
+2026-10-23T10:00:03+00:00 lab sshd[42]: Failed password for invalid user demo from 192.0.2.10 port 4242 ssh2
+2026-10-23T10:00:04+00:00 lab sshd[42]: Failed password for invalid user demo from 192.0.2.10 port 4242 ssh2
+2026-10-23T10:00:06+00:00 lab sshd[42]: Accepted publickey for demo from 192.0.2.10 port 4242 ssh2

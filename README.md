@@ -27,9 +27,23 @@ I am a communications engineer and independent security researcher focused on we
 | Networking | TCP/IP, DNS, HTTP/HTTPS, communications engineering |
 | Research platforms | HackerOne, Bugcrowd, Google Bug Hunters |
 
+## Security tools
+
+Five independent, local-first Python projects with bilingual guides, synthetic examples and regression tests.
+
+| Tool | What it does |
+| --- | --- |
+| [SessionScope](projects/sessionscope) | Compare HAR evidence before and after logout |
+| [FlowDiff](projects/flowdiff) | Compare HTTP and JSON structures without exporting scalar values |
+| [JSRouteMap](projects/jsroutemap) | Map static JavaScript route candidates to source locations |
+| [LogSentinel](projects/logsentinel) | Correlate SSH failures and failed web-path patterns |
+| [BountyEvidence](projects/bountyevidence) | Validate and format reproducible vulnerability reports |
+
+[Browse the toolkit and quick start](projects/README.md) · Python 3.10+ · MIT
+
 ## Education
 
-**Engineering of Information and Communication Technology**  
+**Engineering of Information and Communication Technology**
 Tartous University · 2017–2022
 
 ## Languages
